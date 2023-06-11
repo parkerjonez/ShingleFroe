@@ -4,8 +4,16 @@ FROM python:3.11-slim-buster
 # Set the working directory in the container to /app
 WORKDIR /app
 
+# Install git and git-lfs
+RUN apt-get update && \
+    apt-get install -y git git-lfs && \
+    git lfs install
+
 # Add the current directory contents into the container at /app
 ADD . /app
+
+# Pull the large files
+RUN git lfs pull
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
