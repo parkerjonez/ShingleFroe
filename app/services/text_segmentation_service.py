@@ -1,10 +1,10 @@
 # app/services/text_segmentation_service.py
 from .language_detection_service import detect_language
 
-def segment_text(fasttext_model, transcript_id, text, language=None):
+def segment_text(transcript_id, text, language=None):
     if not language:
         try:
-            language_detection = detect_language(fasttext_model, text)
+            language_detection = detect_language(text)
             language = language_detection['fasttext']['detected_language']
             if language_detection['fasttext']['confidence'] < 0.5:  # Adjust this threshold as needed
                 return {"status": "error", "message": "Confidence in language detection is too low. Please specify a language."}
