@@ -1,5 +1,5 @@
 # app/routes/text_segmentation.py
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, g
 from marshmallow import Schema, fields, ValidationError
 from app.services.text_segmentation_service import segment_text
 
@@ -12,12 +12,19 @@ text_segmentation_bp = Blueprint('text_segmentation_bp', __name__)
 
 @text_segmentation_bp.route('/segment', methods=['POST'])
 def segment_text_route():
+    # Access the FastText model from the application context
+    fasttext_model = g.fasttext_model
+
     schema = TextSegmentationSchema()
     try:
         data = schema.load(request.get_json())
     except ValidationError as e:
         return jsonify({"status": "error", "errors": e.messages}), 400
 
-    result = segment_text(**data)
+    transcript_id = data.get('transcript_id')
+    text = data.get('text')
+    language = data.get('language')
+
+    result = segment_text(fasttext_model, transcript_id, text, language)
 
     return jsonify({"status": "success", **result}), 200

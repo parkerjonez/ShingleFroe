@@ -7,7 +7,7 @@ from app.routes.health_check import health_check_bp
 from app.routes.landing_page import landing_page_bp
 from app.routes.language_detection import language_detection_bp
 
-# Load the FastText model as a global variable
+# Load the FastText model as a global variable since the model is large and will take time to load
 fasttext_model = fasttext.load_model("app/models/lid.176.bin")
 
 def create_app():
