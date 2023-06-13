@@ -1,3 +1,4 @@
 flask
 langdetect
 fasttext
+marshmallow==3.19.0
