@@ -1,6 +1,8 @@
 from flask import Flask, current_app
 import fasttext
 import json
+# import nltk
+import os
 
 from app.routes.text_segmentation import text_segmentation_bp 
 from app.routes.text_analysis import text_analysis_bp
@@ -33,6 +35,15 @@ def create_app():
         
         # Load the configuration and store the supported languages in the application context
         config = load_config()
-        current_app.supported_languages = config['nltk_supported_languages']
+        current_app.nltk_supported_languages = config['nltk_supported_languages']
+
+        # Set the NLTK_DATA environment variable
+        os.environ['NLTK_DATA'] = './resources' # Use a relative path
+
+        # Download NLTK 'punkt' resource for sentence tokenization
+        # nltk.download('punkt')
+    
+        # After nltk.download('punkt')
+        # print(os.listdir('./resources'))
     
     return app

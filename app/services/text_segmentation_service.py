@@ -1,7 +1,14 @@
-# app/services/text_segmentation_service.py
+# Import the necessary modules
+import nltk
 from .language_detection_service import detect_language
+from flask import current_app
 
 def segment_text(transcript_id, text, language=None):
+    """
+    This function segments the input text into sentences.
+    """
+
+    # If language is not provided, perform language detection
     if not language:
         try:
             language_detection = detect_language(text)
@@ -11,8 +18,25 @@ def segment_text(transcript_id, text, language=None):
         except Exception as e:
             return {"status": "error", "message": f"Language detection failed: {str(e)}"}
 
-    # Add your text segmentation logic here using the 'text' and 'language' variables
-    segments = ["El candidato de Vox en la Comunidad Valenciana se aparta para facilitar un Gobierno con el Partido Popular.", "Hola"]  # Placeholder
+    # Get the supported languages from the application config
+    supported_languages = current_app.nltk_supported_languages
+
+    # Check if the detected language is supported
+    if language not in supported_languages.keys():
+        return {"status": "error", "message": f"Language {language} is not supported."}
+
+    # Download NLTK 'punkt' resource for sentence tokenization for the specific language
+    try:
+        nltk.download(f'punkt/{supported_languages[language]}')
+    except Exception as e:
+        return {"status": "error", "message": f"Downloading 'punkt/{supported_languages[language]}' failed: {str(e)}"}
+
+    # Perform text segmentation into sentences
+    try:
+        sent_detector = nltk.data.load(f'tokenizers/punkt/{supported_languages[language]}.pickle')
+        segments = sent_detector.tokenize(text.strip())
+    except Exception as e:
+        return {"status": "error", "message": f"Text segmentation failed: {str(e)}"}
 
     return {
         "status": "success",

@@ -1,23 +1,23 @@
 {
-    "nltk_supported_languages": [
-        "greek",
-        "estonian",
-        "turkish",
-        "polish",
-        "russian",
-        "czech",
-        "portuguese",
-        "dutch",
-        "norwegian",
-        "malayalam",
-        "slovene",
-        "english",
-        "danish",
-        "finnish",
-        "swedish",
-        "spanish",
-        "german",
-        "italian",
-        "french"
-    ]
+    "nltk_supported_languages": {
+        "el": "greek",
+        "et": "estonian",
+        "tr": "turkish",
+        "pl": "polish",
+        "ru": "russian",
+        "cs": "czech",
+        "pt": "portuguese",
+        "nl": "dutch",
+        "no": "norwegian",
+        "ml": "malayalam",
+        "sl": "slovene",
+        "en": "english",
+        "da": "danish",
+        "fi": "finnish",
+        "sv": "swedish",
+        "es": "spanish",
+        "de": "german",
+        "it": "italian",
+        "fr": "french"
+    }
 }

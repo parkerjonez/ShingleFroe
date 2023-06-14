@@ -7,6 +7,9 @@ WORKDIR /app
 # Add the current directory contents into the container at /app
 ADD . /app
 
+# Create a directory for NLTK data
+RUN mkdir -p /app/resources 
+
 # Install wget
 RUN apt-get update && apt-get install -y wget
 
