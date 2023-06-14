@@ -1,5 +1,6 @@
 from flask import Flask, current_app
 import fasttext
+import json
 
 from app.routes.text_segmentation import text_segmentation_bp 
 from app.routes.text_analysis import text_analysis_bp
@@ -11,6 +12,10 @@ def load_fasttext_model():
     # Load the FastText model
     fasttext_model = fasttext.load_model("app/models/lid.176.bin")
     return fasttext_model
+
+def load_config():
+    with open('config.json') as f:
+        return json.load(f)
 
 def create_app():
     app = Flask(__name__)
@@ -25,5 +30,9 @@ def create_app():
     with app.app_context():
         # Load the FastText model and store it in the application context
         current_app.fasttext_model = load_fasttext_model()
+        
+        # Load the configuration and store the supported languages in the application context
+        config = load_config()
+        current_app.supported_languages = config['nltk_supported_languages']
     
     return app
