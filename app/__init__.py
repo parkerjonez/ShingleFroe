@@ -1,7 +1,6 @@
 from flask import Flask, current_app
 import fasttext
 import json
-# import nltk
 import os
 
 from app.routes.text_segmentation import text_segmentation_bp 
@@ -24,26 +23,28 @@ def create_app():
 
     # Register blueprints
     app.register_blueprint(language_detection_bp)
-    app.register_blueprint(text_segmentation_bp)  
+    app.register_blueprint(text_segmentation_bp)
     app.register_blueprint(text_analysis_bp)
     app.register_blueprint(health_check_bp)
     app.register_blueprint(landing_page_bp)
     
     with app.app_context():
-        # Load the FastText model and store it in the application context
-        current_app.fasttext_model = load_fasttext_model()
-        
-        # Load the configuration and store the supported languages in the application context
-        config = load_config()
-        current_app.nltk_supported_languages = config['nltk_supported_languages']
+        try:
+            # Load the FastText model and store it in the application context
+            current_app.fasttext_model = load_fasttext_model()
+        except Exception as e:
+            app.logger.error(f"Failed to load FastText model: {str(e)}")
+
+        try:
+            # Load the configuration and store the supported languages in the application context
+            config = load_config()
+            current_app.nltk_supported_languages = config['nltk_supported_languages']
+            current_app.confidence_threshold = config['language_detection_confidence_threshold']
+
+        except Exception as e:
+            app.logger.error(f"Failed to load configuration: {str(e)}")
 
         # Set the NLTK_DATA environment variable
-        os.environ['NLTK_DATA'] = './resources' # Use a relative path
-
-        # Download NLTK 'punkt' resource for sentence tokenization
-        # nltk.download('punkt')
-    
-        # After nltk.download('punkt')
-        # print(os.listdir('./resources'))
+        os.environ['NLTK_DATA'] = './resources'
     
     return app
