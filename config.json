@@ -19,5 +19,6 @@
         "de": "german",
         "it": "italian",
         "fr": "french"
-    }
+    },
+    "language_detection_confidence_threshold": 0.5
 }
