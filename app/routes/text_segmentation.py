@@ -4,7 +4,7 @@ from marshmallow import Schema, fields, ValidationError
 from app.services.text_segmentation_service import segment_text
 
 class TextSegmentationSchema(Schema):
-    transcript_id = fields.Str(required=True)
+    transcript_id = fields.Int(required=True)
     language = fields.Str(required=False)
     text = fields.Str(required=True)
 
